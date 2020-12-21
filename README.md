@@ -1,36 +1,46 @@
-# Vuetify-material-dashboard-pro-clone
-
-[![Build Status](https://travis-ci.com/kathirr007/Vuetify-md-pro-clone.svg?branch=master)](https://travis-ci.com/kathirr007/Vuetify-md-pro-clone)
-
-**[Vuetify MD Pro](git@github.com:kathirr007/Vuetify-md-pro-clone)** is Clone of the Vuetify Material Dasboard Template from Creative Tim.
-
-<!-- To check live version please checkout **[here](https://kathirr007.github.io/Vuetify-md-pro-clone)** -->
-To check live version please checkout **<a href="https://kathirr007.github.io/Vuetify-md-pro-clone" target="_blank" rel="noopener" title="Vuetify-md-pro-clone">Here</a>**
+# Project Helper Front End (Teacher)
 
 ## Project setup
 ```
-yarn install
+npm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+npm run serve
 ```
 
 ### Compiles and minifies for production
 ```
-yarn run build
+npm run build
 ```
 
-### Run your tests
-```
-yarn run test
+### Connect with backend
+
+Inside **'Project-Helper-Front-End/src/util/index.js'**, there is an mock adapter that mock API response.
+
+Currently only following response have been correctly implemented:
+
+```js
+mock.onPost("/user", { userID: "1111", password: "1111" }).reply(200, {
+  userID: 1111
+});
+
+mock.onGet("/user?user_id=1111").reply(
+  200, {
+    user_id: 1111,
+    username: "Sam",
+    password: "123",
+    is_teacher: false,
+    description: "Personal Description!"
+  }
+)
 ```
 
-### Lints and fixes files
-```
-yarn run lint
-```
+The API should be implemented in similar manner.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Testing of API
+
+Above API is used in **Login** and **User Profile**, if correctly implemented, the login should be successful and User Profile should display User Name and ID correctly
+
+(邮件和描述为固定值，因为给定的API里面没有看见邮件信息)
