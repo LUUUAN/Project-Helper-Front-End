@@ -17,9 +17,9 @@ npm run build
 
 ### Connect with backend
 
-Inside **'Project-Helper-Front-End/src/util/index.js'**, there is an mock adapter that mock API response.
+Inside **'Project-Helper-Front-End/src/util/index.js'**, there is a mock adapter that mocks API response.
 
-Currently only following response have been correctly implemented:
+Currently only following response have been correctly implemented and testes:
 
 ```js
 mock.onPost("/user", { userID: "1111", password: "1111" }).reply(200, {
@@ -44,3 +44,5 @@ The API should be implemented in similar manner.
 Above API is used in **Login** and **User Profile**, if correctly implemented, the login should be successful and User Profile should display User Name and ID correctly
 
 (邮件和描述为固定值，因为给定的API里面没有看见邮件信息)
+
+若想与后端交互，而不是使用mock的response，注释掉上述内容即可。
