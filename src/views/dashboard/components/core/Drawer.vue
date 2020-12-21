@@ -32,16 +32,25 @@
         <base-item-group v-if="item.children" :key="`group-${i}`" :item="item"/>
         <base-item v-else :key="`item-${i}`" :item="item" />
       </template>
-
-      <template v-for="(item, i) in computedItems_TA">
-        <base-item-group v-if="item.children" :key="`group1-${i}`" :item="item"/>
-        <base-item v-else :key="`item1-${i}`" :item="item" />
-      </template>
-      <div v-if="this.$store.state.project!=null">
-        <template v-for="(item, i) in computedItems_proj">
-          <base-item-group v-if="item.children" :key="`group2-${i}`" :item="item"/>
-          <base-item v-else :key="`item2-${i}`" :item="item" />
+      <div v-if="!this.$store.state.student">
+        <template v-for="(item, i) in computedItems_TA">
+          <base-item-group v-if="item.children" :key="`group1-${i}`" :item="item"/>
+          <base-item v-else :key="`item1-${i}`" :item="item" />
         </template>
+      </div>
+      <div v-if="this.$store.state.project!=null">
+        <div v-if="this.$store.state.student">
+          <template v-for="(item, i) in computedItems_proj_stu">
+            <base-item-group v-if="item.children" :key="`group2-${i}`" :item="item"/>
+            <base-item v-else :key="`item2-${i}`" :item="item" />
+          </template>
+        </div>
+        <div v-else>
+          <template v-for="(item, i) in computedItems_proj">
+            <base-item-group v-if="item.children" :key="`group2-${i}`" :item="item"/>
+            <base-item v-else :key="`item2-${i}`" :item="item" />
+          </template>
+        </div>
       </div>
       <div />
     </v-list>
@@ -123,6 +132,35 @@ export default {
         ],
       },
     ],
+    items_proj_stu: [
+      {
+        group: "/proj",
+        icon: "mdi-image",
+        title: "PROJECT",
+        children: [
+          {
+            title: "PROJECT HOME",
+            to: "dash",
+            icon: "mdi-view-dashboard",
+          },
+          {
+            title: "ANNOUNCEMENT",
+            to: "announcements",
+            icon: "mdi-archive-arrow-up-outline",
+          },
+          {
+            title: "MEMBERS",
+            to: "members",
+            icon: "mdi-account-box-multiple"
+          },
+          {
+            title: "SUBMISSIONS",
+            to: "submissions",
+            icon: "mdi-folder",
+          },
+        ],
+      },
+    ],
   }),
 
   computed: {
@@ -144,6 +182,9 @@ export default {
     computedItems_proj() {
       return this.items_proj.map(this.mapItem);
     },
+    computedItems_proj_stu() {
+      return this.items_proj_stu.map(this.mapItem);
+    }
   },
 
   watch: {

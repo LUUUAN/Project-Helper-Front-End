@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     projects: {},
     courses: {},
     project: null,
+    student: true,
   },
 
   mutations: {
