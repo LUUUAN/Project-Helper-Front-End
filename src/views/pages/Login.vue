@@ -112,7 +112,7 @@
               if (response.status === 200) {
                 this.$store.commit('SET_TOKEN', "ThisIsAToken")
                 console.log('token is set to:', this.$store.state.token)
-                this.$store.dispatch('FETCH_USER', response.data.userID)
+                this.$store.dispatch('FETCH_USER', this.loginForm.userID)
                 this.$router.push({ name: 'Dashboard' })
               }
             })

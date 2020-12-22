@@ -17,9 +17,7 @@ axios.interceptors.response.use(response => {
 
 const mock = new MockAdapter(axios);
 
-mock.onPost("/user", { userID: "1111", password: "1111" }).reply(200, {
-  token: "ThisIsTheFirstToken", userID: 1111
-});
+mock.onPost("/user", { userID: "1111", password: "1111" }).reply(200);
 
 mock.onGet("/user?user_id=1111").reply(
   200, {
