@@ -159,6 +159,46 @@ const router = new Router({
           meta: {
             requireAuth: true
           }
+        },
+        {
+          name: 'Project Dashboard',
+          path: '/proj/dash',
+          component: () => import('@/views/student/proj/ProjDash'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          name: 'Project Announcements',
+          path: '/proj/announcement',
+          component: () => import('@/views/student/proj/Announcement/Anns'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          name: 'Announcement Detail',
+          path: '/proj/announcedetail',
+          component: () => import('@/views/student/proj/Announcement/Ann'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          name: 'Members',
+          path: '/proj/members',
+          component: () => import('@/views/student/proj/members'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          name: 'Submissions',
+          path: '/proj/submissions',
+          component: () => import('@/views/student/proj/Submissions'),
+          meta: {
+            requireAuth: true
+          }
         }
       ]
     },
@@ -182,10 +222,11 @@ router.beforeEach((to, from, next) => {
     if (token) {
       next()
     } else {
-      console.log('该页面需要登陆')
-      next({
-        path: '/'
-      })
+      next()
+      // console.log('该页面需要登陆')
+      // next({
+      //   path: '/'
+      // })
     }
   } else {
     next()
