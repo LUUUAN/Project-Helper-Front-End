@@ -84,10 +84,13 @@ mock.onGet("/projects").reply(200, {
   data: [{ project_id: "1234", project_name: "Project Helper", project_course: "CS309" },
     { project_id: "1235", project_name: "DBOJ", project_course: "CS309" }]
 });
-mock.onPost("/lab").reply((config) => {
+mock.onPost("/lab").reply(200, (config) => {
   const data = JSON.parse(config.data);
   this.$store.labs.add(data);
 })
+
+mock.onPost("/course").reply(200);
+
 mock.onGet('/project/1234').reply(200, {
   proj: {
     class: "Object Oriented Analysis and Design",

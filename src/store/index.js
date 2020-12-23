@@ -48,7 +48,7 @@ const store = new Vuex.Store({
       });
     },
     async FETCH_LABS({ state }) {
-      return axios.get("/labs").then(resp => {
+      return axios.get(`/course/${state.project}`).then(resp => {
         const { data } = resp.data;
         state.labs = data;
       });
