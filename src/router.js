@@ -217,16 +217,15 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const { token } = store.state
   if (to.meta.requireAuth) {
-    if (token) {
+    if (window.localStorage.getItem('token')) {
       next()
     } else {
-      next()
-      // console.log('该页面需要登陆')
-      // next({
-      //   path: '/'
-      // })
+      // next()
+      console.log('该页面需要登陆')
+      next({
+        path: '/'
+      })
     }
   } else {
     next()

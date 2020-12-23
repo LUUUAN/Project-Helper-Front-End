@@ -12,7 +12,7 @@
     v-bind="$attrs"
   >
     <template v-slot:img="props">
-      <v-img :gradient="`to bottom, ${barColor}`" v-bind="props" />
+      <v-img :gradient="`to bottom, ${barColor}`" v-bind="props"/>
     </template>
 
     <v-list-item two-line>
@@ -26,40 +26,40 @@
 
     <v-list expand nav>
 
-      <div />
+      <div/>
 
       <template v-for="(item, i) in computedItems_all">
         <base-item-group v-if="item.children" :key="`group-${i}`" :item="item"/>
-        <base-item v-else :key="`item-${i}`" :item="item" />
+        <base-item v-else :key="`item-${i}`" :item="item"/>
       </template>
-      <div v-if="!this.$store.state.student">
+      <div v-if="this.$store.state.user.is_teacher">
         <template v-for="(item, i) in computedItems_TA">
           <base-item-group v-if="item.children" :key="`group1-${i}`" :item="item"/>
-          <base-item v-else :key="`item1-${i}`" :item="item" />
+          <base-item v-else :key="`item1-${i}`" :item="item"/>
         </template>
       </div>
       <div v-if="this.$store.state.project!=null">
-        <div v-if="this.$store.state.student">
+        <div v-if="!this.$store.state.user.is_teacher">
           <template v-for="(item, i) in computedItems_proj_stu">
             <base-item-group v-if="item.children" :key="`group2-${i}`" :item="item"/>
-            <base-item v-else :key="`item2-${i}`" :item="item" />
+            <base-item v-else :key="`item2-${i}`" :item="item"/>
           </template>
         </div>
         <div v-else>
           <template v-for="(item, i) in computedItems_proj">
             <base-item-group v-if="item.children" :key="`group2-${i}`" :item="item"/>
-            <base-item v-else :key="`item2-${i}`" :item="item" />
+            <base-item v-else :key="`item2-${i}`" :item="item"/>
           </template>
         </div>
       </div>
-      <div />
+      <div/>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
 // Utilities
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 // import Icons from "../../component/Icons.vue";
 
 export default {

@@ -38,7 +38,7 @@
                 dark
               >
                 Wrong student ID or password, input again!
-                </v-alert>
+              </v-alert>
               <v-text-field
                 color="secondary"
                 label="Student ID"
@@ -46,7 +46,7 @@
                 class="mt-10"
                 :rules="[v => !!v || 'ID is required']"
                 required
-                v-model="loginForm.userID"
+                v-model="loginForm.username"
               />
 
               <v-text-field
@@ -80,51 +80,57 @@
 </template>
 
 <script>
-  import axios from "@/utils";
+import axios from "@/utils";
 
-  export default {
-    name: 'PagesLogin',
+export default {
+  name: 'PagesLogin',
 
-    components: {
-      PagesBtn: () => import('./components/Btn')
-    },
+  components: {
+    PagesBtn: () => import('./components/Btn')
+  },
 
-    data: () => ({
-      loginForm: {
-        userID: "",
-        pass: "",
-        correct: true,
-      }
-    }),
-
-    methods: {
-      submitLogin () {
-        console.log("IN Function");
-        console.log(this.$refs.loginForm);
-        const valid = this.$refs.loginForm.validate;
-        if (valid) {
-          axios.post('/user', {
-            userID: this.loginForm.userID,
-            password: this.loginForm.pass
-          })
-            .then((response) => {
-              console.log("RECEIVE RESPONSE")
-              if (response.status === 200) {
-                this.$store.commit('SET_TOKEN', "ThisIsAToken")
-                console.log('token is set to:', this.$store.state.token)
-                this.$store.dispatch('FETCH_USER', this.loginForm.userID)
-                this.$router.push({ name: 'Dashboard' })
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-              this.loginForm.correct = false;
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      },
+  data: () => ({
+    loginForm: {
+      username: "",
+      pass: "",
+      correct: true,
     }
+  }),
+
+  methods: {
+    submitLogin() {
+      console.log("IN Function");
+      console.log(this.$refs.loginForm);
+      const valid = this.$refs.loginForm.validate;
+      if (valid) {
+        axios.post('/user', {
+          username: this.loginForm.username,
+          password: this.loginForm.pass
+        })
+          .then((response) => {
+            console.log("RECEIVE RESPONSE")
+            if (response.status === 200) {
+              this.$store.commit('SET_TOKEN', "ThisIsAToken")
+              console.log('token is set to:', window.localStorage.getItem('token'))
+              // eslint-disable-next-line no-shadow
+              axios.get(`/user?username=${this.loginForm.username}`).then((response) => {
+                if (response.status === 200) {
+                  const {user_id} = response.data;
+                  this.$store.dispatch('FETCH_USER', user_id)
+                }
+              })
+              this.$router.push({name: 'Dashboard'})
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            this.loginForm.correct = false;
+          })
+      } else {
+        console.log('error submit!!')
+        return false
+      }
+    },
   }
+}
 </script>
