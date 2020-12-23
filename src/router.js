@@ -18,11 +18,6 @@ const router = new Router({
           component: () => import('@/views/pages/Lock')
         },
         {
-          name: 'Pricing',
-          path: 'pages/pricing',
-          component: () => import('@/views/pages/Pricing')
-        },
-        {
           name: 'Register',
           path: 'pages/register',
           component: () => import('@/views/pages/Register'),
@@ -75,7 +70,7 @@ const router = new Router({
         {
           name: 'Add Project',
           path: '/add-proj',
-          component: () => import('@/views/dashboard/AddProj'),
+          component: () => import('@/views/teacher/AddProj'),
           meta: {
             requireAuth: true
           }
@@ -83,7 +78,7 @@ const router = new Router({
         {
           name: 'Add Course',
           path: '/add-course',
-          component: () => import('@/views/dashboard/AddCourse'),
+          component: () => import('@/views/teacher/AddCourse'),
           meta: {
             requireAuth: true
           }
@@ -91,7 +86,7 @@ const router = new Router({
         {
           name: 'Announcements',
           path: '/proj/announcements',
-          component: () => import('@/views/dashboard/proj/Announcement/Anns'),
+          component: () => import('@/views/teacher/proj/Announcement/Anns'),
           meta: {
             requireAuth: true
           }
@@ -99,7 +94,7 @@ const router = new Router({
         {
           name: 'AnnouncementDetail',
           path: '/proj/announcement',
-          component: () => import('@/views/dashboard/proj/Announcement/Ann'),
+          component: () => import('@/views/teacher/proj/Announcement/Ann'),
           meta: {
             requireAuth: true
           }
@@ -107,7 +102,7 @@ const router = new Router({
         {
           name: 'Assignment Grading',
           path: '/proj/assignment-grading',
-          component: () => import('@/views/dashboard/proj/Assignment/AsgmtGrade'),
+          component: () => import('@/views/teacher/proj/Assignment/AsgmtGrade'),
           meta: {
             requireAuth: true
           }
@@ -115,7 +110,7 @@ const router = new Router({
         {
           name: 'Assignment List',
           path: '/proj/assignment-list',
-          component: () => import('@/views/dashboard/proj/Assignment/AsgmtList'),
+          component: () => import('@/views/teacher/proj/Assignment/AsgmtList'),
           meta: {
             requireAuth: true
           }
@@ -123,7 +118,7 @@ const router = new Router({
         {
           name: 'Assignment Info',
           path: '/proj/assignment-info',
-          component: () => import('@/views/dashboard/proj/Assignment/AsgmtInfo'),
+          component: () => import('@/views/teacher/proj/Assignment/AsgmtInfo'),
           meta: {
             requireAuth: true
           }
@@ -131,7 +126,7 @@ const router = new Router({
         {
           name: 'NewAssignment',
           path: '/proj/newAssignment',
-          component: () => import('@/views/dashboard/proj/Assignment/NewAsgmt'),
+          component: () => import('@/views/teacher/proj/Assignment/NewAsgmt'),
           meta: {
             requireAuth: true
           }
@@ -139,7 +134,7 @@ const router = new Router({
         {
           name: 'Groups',
           path: '/proj/groups',
-          component: () => import('@/views/dashboard/proj/Groups'),
+          component: () => import('@/views/teacher/proj/Groups'),
           meta: {
             requireAuth: true
           }
@@ -147,7 +142,7 @@ const router = new Router({
         {
           name: 'Project Dashboard',
           path: '/proj/home',
-          component: () => import('@/views/dashboard/proj/ProjDash'),
+          component: () => import('@/views/teacher/proj/ProjDash'),
           meta: {
             requireAuth: true
           }
@@ -155,7 +150,7 @@ const router = new Router({
         {
           name: 'Students',
           path: '/proj/students',
-          component: () => import('@/views/dashboard/proj/Students'),
+          component: () => import('@/views/teacher/proj/Students'),
           meta: {
             requireAuth: true
           }

@@ -115,11 +115,18 @@ export default {
               // eslint-disable-next-line no-shadow
               axios.get(`/user?username=${this.loginForm.username}`).then((response) => {
                 if (response.status === 200) {
-                  const {user_id} = response.data;
+                  const { user_id } = response.data;
                   this.$store.dispatch('FETCH_USER', user_id)
                 }
+              });
+              axios.get(`/user/role?username=${this.loginForm.username}`).then((response2) => {
+                if (response2.status === 200) {
+                  const { roles } = response2.data;
+                  this.$store.commit('SET_ROLE', roles)
+                }
+              }).then(() => {
+                this.$router.push({ name: 'Dashboard' })
               })
-              this.$router.push({name: 'Dashboard'})
             }
           })
           .catch((error) => {

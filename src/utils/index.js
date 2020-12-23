@@ -9,7 +9,7 @@ axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
   request.headers = {
     ...request.headers,
-    token: window.localStorage.getItem("token")
+    token: `Bearer ${window.localStorage.getItem("token")}`
   }
   return request
 });
@@ -25,8 +25,8 @@ axios.interceptors.response.use(response => {
 
 const mock = new MockAdapter(axios);
 
-mock.onPost("/user", {username: "stu01", password: "stu01"}).reply(200);
-mock.onPost("/user", {username: "TA01", password: "TA01"}).reply(200);
+mock.onPost("/user", { username: "stu01", password: "stu01" }).reply(200);
+mock.onPost("/user", { username: "TA01", password: "TA01" }).reply(200);
 
 mock.onGet("/user?username=stu01").reply(
   200, {
@@ -54,23 +54,26 @@ mock.onGet("/user?user_id=2222").reply(
     user_id: 2222,
     username: "Teacher 1",
     password: "TA01",
-    is_teacher: true,
     description: "Personal Description!"
   }
 )
 
-mock.onGet("/user?user_id=1111").reply(
+
+mock.onGet("/user/role?username=TA01").reply(
   200, {
-    user_id: 1111,
-    username: "Sam",
-    password: "123",
-    is_teacher: false,
-    description: "Personal Description!"
+    roles: 'teacher'
+  }
+)
+
+
+mock.onGet("/user/role?username=stu01").reply(
+  200, {
+    roles: 'student'
   }
 )
 
 mock.onGet("/labs").reply(200, {
-  data: [{lab_id: "1234", lab_name: "CS309 lab1", lab_course: "CS309"}, {
+  data: [{ lab_id: "1234", lab_name: "CS309 lab1", lab_course: "CS309" }, {
     lab_id: "1234",
     lab_name: "CS309 lab1",
     lab_course: "CS309"
@@ -78,8 +81,8 @@ mock.onGet("/labs").reply(200, {
 });
 
 mock.onGet("/projects").reply(200, {
-  data: [{project_id: "1234", project_name: "Project Helper", project_course: "CS309"},
-    {project_id: "1235", project_name: "DBOJ", project_course: "CS309"}]
+  data: [{ project_id: "1234", project_name: "Project Helper", project_course: "CS309" },
+    { project_id: "1235", project_name: "DBOJ", project_course: "CS309" }]
 });
 mock.onPost("/lab").reply((config) => {
   const data = JSON.parse(config.data);

@@ -14,7 +14,6 @@ const store = new Vuex.Store({
     projects: {},
     courses: {},
     project: null,
-    student: true,
   },
 
   mutations: {
@@ -32,55 +31,57 @@ const store = new Vuex.Store({
     },
     LOGOUT: (state) => {
       // 登出的时候要清除token
-      state.user = null
-      window.localStorage.removeItem('token')
+      state.user = null;
+      state.project = null;
+      window.localStorage.removeItem('token');
+    },
+    SET_ROLE: (state, data) => {
+      window.localStorage.setItem('roles', data)
     }
   },
 
   actions: {
-    async FETCH_USER({state}, id) {
+    async FETCH_USER({ state }, id) {
       return axios.get(`/user?user_id=${id}`).then(resp => {
-        const {data} = resp;
-        // console.log(data);
-        // console.log(resp.data);
-        state.user = data;
+        const { data } = resp;
+        window.localStorage.setItem('user', data)
       });
     },
-    async FETCH_LABS({state}) {
+    async FETCH_LABS({ state }) {
       return axios.get("/labs").then(resp => {
-        const {data} = resp.data;
+        const { data } = resp.data;
         state.labs = data;
       });
     },
-    async FETCH_PROJECT({state}) {
+    async FETCH_PROJECT({ state }) {
       return axios.get("/projects").then(resp => {
-        const {data} = resp.data;
+        const { data } = resp.data;
         state.projects = data;
         console.log(state.projects);
       });
     },
-    async FETCH_COURSE({state}) {
+    async FETCH_COURSE({ state }) {
       return axios.get("/courses").then(resp => {
-        const {data} = resp.data;
+        const { data } = resp.data;
         state.courses = data;
       });
     },
-    async NEW_PROJECT({dispatch}, project) {
+    async NEW_PROJECT({ dispatch }, project) {
       return axios.post(`/project`, project).then(() => {
         dispatch("FETCH_PROJECTS");
       });
     },
-    async DELETE_PROJECT({dispatch}, {name}) {
+    async DELETE_PROJECT({ dispatch }, { name }) {
       return axios.delete(`/project/${name}`).then(() => {
         dispatch("FETCH_PROJECTS");
       });
     },
-    async UPDATE_PROJECT({dispatch}, {name, project}) {
+    async UPDATE_PROJECT({ dispatch }, { name, project }) {
       return axios.patch(`/project/${name}`, project).then(() => {
         dispatch("FETCH_PROJECTS");
       });
     },
-    async UPDATE_LABS({dispatch}, {name, lab}) {
+    async UPDATE_LABS({ dispatch }, { name, lab }) {
       return axios.patch(`/lab/${name}`, lab).then(() => {
         dispatch("FETCH_LABS");
       });

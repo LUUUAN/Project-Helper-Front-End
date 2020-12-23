@@ -1,7 +1,7 @@
 <template>
   <v-container id="addProjForm" fluid tag="section">
     <section class="mb-12 text-center">
-      <h1 class="font-weight-light mb-2 headline">Add New Course</h1>
+      <h1 class="font-weight-light mb-2 headline">Add New Project</h1>
 
       <span class="font-weight-light subtitle-1">Create class first if you haven't</span>
     </section>
@@ -11,28 +11,65 @@
         <v-card class="pa-6">
           <v-row>
             <v-col cols="12" md="6">
+              <base-subheading>Course</base-subheading>
+
+              <v-select color="secondary" item-color="secondary" :items="classes">
+                <template v-slot:item="{ attrs, item, on }">
+                  <v-list-item
+                    v-bind="attrs"
+                    active-class="secondary elevation-4 white--text"
+                    class="mx-3 mb-3 v-sheet"
+                    elevation="0"
+                    v-on="on"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item" />
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-select>
+
               <div class="my-3" />
               <base-subheading>Name</base-subheading>
-              <v-text-field color="secondary" label="Course Name*" />
+              <v-text-field color="secondary" label="Project Name*" />
               <div class="my-3" />
 
-              <base-subheading>Term</base-subheading>
-              <v-row justify="start" align-content="space-between">
-                <v-col cols="12" md="6">
-                  <v-select :items="semesters" label="Semester">
-                  </v-select>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-select :items="acaYear" label="Academic Year">
-                  </v-select>
-                </v-col>
-              </v-row>
-
+              <base-subheading>Grouping Rule</base-subheading>
+              <v-range-slider
+                label="Allowed Group Size"
+                v-model="projNum"
+                step="1"
+                :max="10"
+                :min="1"
+                thumb-label="always"
+                track-color="success"
+                color="warning"
+              ></v-range-slider>
+              <v-switch
+                v-model="acrossLab"
+                inset
+                :label="`Allow grouping across lab: ${acrossLab.toString()}`"
+              ></v-switch>
+              <div class="my-3" />
               <base-subheading>Description</base-subheading>
               <v-textarea solo name="input-new-proj-info" hint="Enter Project Description Here" />
             </v-col>
             <v-col cols="12" md="6">
+              <base-subheading>Skill Tags</base-subheading>
 
+              <v-combobox v-model="items" color="secondary" multiple>
+                <template v-slot:selection="{ attrs, item, select, selected }">
+                  <v-chip
+                    v-bind="attrs"
+                    :input-value="selected"
+                    color="secondary"
+                    close
+                    small
+                    @click="select"
+                    @click:close="remove(item)"
+                  >{{ item }}</v-chip>
+                </template>
+              </v-combobox>
               <base-subheading class="mb-6">File Upload</base-subheading>
 
               <v-file-input
@@ -55,49 +92,7 @@
                   >+{{ files.length - 2 }} File(s)</span>
                 </template>
               </v-file-input>
-
-              <base-subheading>Course Time</base-subheading>
-              <v-row justify="start" align-content="space-between">
-                <v-col cols="12" md="4">
-                  <v-select :items="days" label="Course Day">
-                  </v-select>
-                </v-col>
-                <v-col cols="12" md="4">
-                  <v-select :items="courseTime" label="Course Time">
-                  </v-select>
-                </v-col>
-                <v-col cols="12" md="4">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    min-width="290px"
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date"
-                        color="secondary"
-                        label="Select end date of course"
-                        prepend-icon="mdi-calendar-outline"
-                        readonly
-                        v-on="on"
-                      />
-                    </template>
-
-                    <v-date-picker v-model="date" color="secondary" landscape scrollable>
-                      <v-spacer />
-                      <v-btn color="secondary" large @click="menu = false">Cancel</v-btn>
-
-                      <v-btn color="secondary" large @click="$refs.menu.save(date)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
-                </v-col>
-              </v-row>
-
-              <base-subheading class="mb-6">Labs</base-subheading>
+              <base-subheading class="mb-6">Deadline</base-subheading>
               <Deadline
                 v-for="field in fields"
                 :key="field.id"
@@ -106,7 +101,7 @@
                 :id="field.id"
                 @deleteddl="deleteDDL"
               ></Deadline>
-              <v-btn type="button" v-on:click="addDDL()">Add Labs</v-btn>
+              <v-btn type="button" v-on:click="addDDL()">Add Deadline</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -121,7 +116,7 @@
 </template>
 
 <script>
-import Deadline from "./accessory/Deadline.vue";
+import Deadline from "../dashboard/accessory/Deadline.vue";
 
 export default {
   components: { Deadline },
@@ -131,10 +126,6 @@ export default {
     menu: false,
     menu2: false,
     menu3: false,
-    semesters: ["Spring", "Fall", "Summer"],
-    acaYear: [2020, 2021, 2022, 2023],
-    days: ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."],
-    courseTime: ["1-2", "3-4", "5-6", "7-8", "9-10"],
     fields: [],
     ddlCount: 0,
     projNum: [1, 3],
