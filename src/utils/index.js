@@ -61,6 +61,43 @@ mock.onGet("/user?user_id=2222").reply(
 )
 
 
+mock.onGet("/user?user_id=4").reply(
+  200, {
+    user_id: 1114,
+    username: "Student 4",
+    password: "stu04",
+    is_teacher: false,
+    description: "Personal Description!"
+  }
+)
+mock.onGet("/user?user_id=3").reply(
+  200, {
+    user_id: 1113,
+    username: "Student 3",
+    password: "stu03",
+    is_teacher: false,
+    description: "Personal Description!"
+  }
+)
+mock.onGet("/user?user_id=1").reply(
+  200, {
+    user_id: 1111,
+    username: "Student 1",
+    password: "stu01",
+    is_teacher: false,
+    description: "Personal Description!"
+  }
+)
+mock.onGet("/user?user_id=2").reply(
+  200, {
+    user_id: 1112,
+    username: "Student 2",
+    password: "stu02",
+    is_teacher: false,
+    description: "Personal Description!"
+  }
+)
+
 mock.onGet("/user/role?username=TA01").reply(
   200, {
     roles: 'teacher'
@@ -114,29 +151,53 @@ mock.onGet("/course?course_id=4").reply(200, {
   course_id: 4
 })
 
-
-mock.onGet('/project/1234').reply(200, {
-  proj: {
-    class: "Object Oriented Analysis and Design",
-    name: "Project Helper",
-    discription: "Some Text Here",
-    disable: "false",
-    menu: false,
-    menu2: false,
-    menu3: false,
-    fields: [],
-    ddlCount: 0,
-    projNum: [1, 3],
-    date: "",
-    files: [],
-    items: ["Javascript", "SpringBoot", "UI Design", "Vue.js"],
-    classes: [
-      "Object Oriented Analysis and Design",
-      "Cyptography and Network Security",
-      "Computer Network",
-      "Embedded System",
-      "Artifitial Intelligence",
-    ],
-  },
+mock.onGet(`course/project/1/team`).reply(200, [1, 2])
+mock.onGet(`/project/1/team/1`).reply(200, {
+  team_id: 1,
+  team_name: "tem1",
+  team_description: "this is a description",
+  team_is_locked: 0,
+  team_size: 1,
+  team_setAutomatch: 1,
+  leader_id: 1
 })
+
+mock.onGet(`/project/1/team/2`).reply(200, {
+  team_id: 2,
+  team_name: "tem2",
+  team_description: "this is a description",
+  team_is_locked: 0,
+  team_size: 1,
+  team_setAutomatch: 1,
+  leader_id: 1
+})
+
+mock.onGet(`/project/1/team/1/student`).reply(200, [1,2])
+mock.onGet(`/project/1/team/2/student`).reply(200, [3,4])
+
+// //
+// // mock.onGet('/project/1234').reply(200, {
+// //   proj: {
+// //     class: "Object Oriented Analysis and Design",
+// //     name: "Project Helper",
+// //     discription: "Some Text Here",
+// //     disable: "false",
+// //     menu: false,
+// //     menu2: false,
+// //     menu3: false,
+// //     fields: [],
+// //     ddlCount: 0,
+// //     projNum: [1, 3],
+// //     date: "",
+// //     files: [],
+// //     items: ["Javascript", "SpringBoot", "UI Design", "Vue.js"],
+// //     classes: [
+// //       "Object Oriented Analysis and Design",
+// //       "Cyptography and Network Security",
+// //       "Computer Network",
+// //       "Embedded System",
+// //       "Artifitial Intelligence",
+// //     ],
+// //   },
+// // })
 export default axios;

@@ -57,7 +57,7 @@
             <v-col cols="12" md="6">
               <base-subheading>Skill Tags</base-subheading>
 
-              <v-combobox v-model="items" color="secondary" multiple>
+              <v-combobox v-model="projectTags" color="secondary" multiple>
                 <template v-slot:selection="{ attrs, item, select, selected }">
                   <v-chip
                     v-bind="attrs"
@@ -139,7 +139,7 @@ export default {
       },
     ],
     files: [],
-    items: ["Javascript", "SpringBoot", "UI Design", "Vue.js"],
+    projectTags: ["Javascript", "SpringBoot", "UI Design", "Vue.js"],
     acrossLab: false,
     allCourse: [],
     courseNameSelected: "",
@@ -155,6 +155,10 @@ export default {
     }
   }),
   methods: {
+    remove (item) {
+      this.projectTags.splice(this.projectTags.indexOf(item), 1)
+      this.projectTags = [...this.projectTags]
+    },
     saveGroupingDDL() {
       this.proj.project_end_grouping_time = this.date;
       this.menu = false;
@@ -172,9 +176,16 @@ export default {
         }
       }
       axios.post(`/course/${this.proj.course_id}/project`, this.proj).then((response) => {
-        if (response.status === 200) {
-          alert("Add Success")
-        }
+        const projectID = response.data.project_id;
+        // eslint-disable-next-line camelcase
+        axios.post(`/course/${this.proj.course_id}/project/${projectID}/tag`, {
+          project_id: projectID,
+          project_tag_name: this.projectTags
+        }).then((resp) => {
+          if (resp.status === 200) {
+            alert("Add Success")
+          }
+        })
       })
     }
   },

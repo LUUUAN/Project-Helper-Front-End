@@ -28,38 +28,26 @@
       <v-row align="end" align-content="center" justify="space-around">
         <v-btn
           class="ma-2"
-          :loading="loading2"
-          :disabled="loading2"
           color="success"
-          @click="loader = 'loading2'"
         >
           Upload Grade
           <v-icon right dark>mdi-cloud-upload</v-icon>
         </v-btn>
         <v-btn
           class="ma-2"
-          :loading="loading2"
-          :disabled="loading2"
           color="success"
-          @click="loader = 'loading2'"
         >
           Download Homework
           <v-icon right dark>mdi-cloud-download</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
-          :loading="loading3"
-          :disabled="loading3"
           color="blue-grey"
           class="ma-2 white--text"
-          @click="loader = 'loading3'"
         >Discard Changes</v-btn>
         <v-btn
           class="ma-2"
-          :loading="loading2"
-          :disabled="loading2"
           color="success"
-          @click="loader = 'loading2'"
         >
           Submit Changes
           <v-icon right dark>mdi-cloud-upload</v-icon>

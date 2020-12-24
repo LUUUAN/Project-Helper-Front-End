@@ -12,7 +12,18 @@ const store = new Vuex.Store({
     labs: {},
     projects: {},
     courses: {},
-    project: null,
+    project: {
+      course_id: 0,
+      project_id: 1,
+      project_name: "Project Helper",
+      max_team_size: 5,
+      min_team_size: 2,
+      project_description: "this is a description",
+      project_team_number: 10,
+      project_end_grouping_time: "1608296086917",
+      project_across_lab: 0,
+    },
+    groupIDs: [],
   },
 
   mutations: {
@@ -53,23 +64,15 @@ const store = new Vuex.Store({
         state.labs = data;
       });
     },
-    async FETCH_PROJECT({ state }) {
-      return axios.get("/projects").then(resp => {
-        const { data } = resp.data;
-        state.projects = data;
-        console.log(state.projects);
-      });
-    },
-    async FETCH_COURSE({ state }) {
-      return axios.get("/courses").then(resp => {
-        const { data } = resp.data;
-        state.courses = data;
-      });
-    },
     async NEW_PROJECT({ dispatch }, project) {
       return axios.post(`/project`, project).then(() => {
         dispatch("FETCH_PROJECTS");
       });
+    },
+    async FETCH_PROJECT({ state }) {
+      return axios.get(`/projects`).then((resp) => {
+        state.projects = resp.data;
+      })
     },
     async DELETE_PROJECT({ dispatch }, { name }) {
       return axios.delete(`/project/${name}`).then(() => {
@@ -91,31 +94,3 @@ const store = new Vuex.Store({
 })
 
 export default store;
-
-
-// import Vue from 'vue'
-// import Vuex from 'vuex'
-//
-// Vue.use(Vuex)
-//
-// export default new Vuex.Store({
-//   state: {
-//     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
-//     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
-//     drawer: null
-//   },
-//   mutations: {
-//     SET_BAR_IMAGE(state, payload) {
-//       state.barImage = payload
-//     },
-//     SET_DRAWER(state, payload) {
-//       state.drawer = payload
-//     },
-//     SET_SCRIM(state, payload) {
-//       state.barColor = payload
-//     }
-//   },
-//   actions: {
-//
-//   }
-// })

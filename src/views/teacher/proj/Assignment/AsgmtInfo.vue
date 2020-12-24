@@ -12,8 +12,8 @@
         </base-material-card>
       </v-col>
     </v-row>
-    <v-row>
-      <v-btn large v-on="on" @click="$router.go(-1)">Go Back</v-btn>
+    <v-row align="center" justify="space-around">
+      <v-btn color="success" large  @click="$router.go(-1)">Go Back</v-btn>
     </v-row>
   </v-container>
 </template>

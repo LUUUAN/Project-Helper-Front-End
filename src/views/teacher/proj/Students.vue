@@ -107,7 +107,6 @@
                         >
                           <v-text-field
                             v-model="firstname"
-                            :rules="nameRules"
                             :counter="10"
                             label="First name"
                             required
@@ -119,7 +118,6 @@
                         >
                           <v-text-field
                             v-model="lastname"
-                            :rules="nameRules"
                             :counter="10"
                             label="Last name"
                             required
@@ -179,6 +177,11 @@ export default {
       changeDialog: false,
       manuAddDialog: false,
       fileAddDialog: false,
+      valid: true,
+      stuID: '',
+      firstname: '',
+      lastname: '',
+      lab: '',
       Records: [
         {
           name: "Name1",
