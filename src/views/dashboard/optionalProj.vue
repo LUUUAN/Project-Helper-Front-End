@@ -57,7 +57,7 @@
             show-expand
             class="elevation-1">
             <template v-slot:expanded-item="{ headers, item }">
-              <td :colspan="headers.length">{{ item.description }}</td>
+              <td :colspan="headers.length">{{ item.team_description }}</td>
             </template>
             <template v-slot:item.actions="{ item }">
       <v-icon
@@ -81,30 +81,48 @@
 </template>
 
 <script>
+import axios from "@/store"
+
 export default {
   data: () => ({
       headers: [
-        { text: "Name", value: "name" },
-        { text: "Course", value: "course" },
-        { text: "Lab", value: "lab" },
-        { text: "Project", value: "project" },
         { text: "Team Name", value: "team_name" },
-        { text: "Size", value: "size" },
-        { text: "Leader", value: "leader" },
-        { text: "Apply Time", value: "apply_time" },
+        { text: "Team ID", value: "team_id" },
+        { text: "Size", value: "team_size" },
         { text: "Actions", value: "actions", sortable: false }
       ],
       invitations: [
         {
-            groupis: 1,
-            name: "大鸟转转转",
-            size: 3,
+            team_name: "大鸟转转转",
+            team_size: 3,
             leader: "114514",
-            description: "Test Group"
+            team_description: "Test Group"
         }
       ]
   }),
   methods: {
+    getInvitations() {
+      let inviteGroups;
+      let i = 0;
+      const id = this.$store.state.user.user_id;
+      console.log("IN getInvitations()");
+      console.log(`${this.$store.state.user.user_id}`);
+      axios.get(`/student/${id}/application`)
+        .then(response => (inviteGroups = response.data))
+        .catch((error) => {
+          console.log(error);
+        });
+      for (i; i < inviteGroups.size(); i++) {
+        axios.get(`/course/project/team/${inviteGroups[i]}`)
+        .then(response => (this.invitations.append(response.data)))
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    }
   },
+  created() {
+    this.getInvitations();
+  }
 };
 </script>

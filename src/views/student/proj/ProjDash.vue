@@ -236,7 +236,6 @@
 </template>
 
 <script>
-import axios from '@/utils'
 
 export default {
 
@@ -321,19 +320,6 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
-    getProject() {
-      console.log("IN getProject()");
-      console.log(`${this.$store.state.project}`);
-      axios.get(`/project/${this.$store.state.project}`)
-        .then(response => (this.proj = response.data.proj))
-        .catch((error) => {
-          console.log(error);
-        });
-      console.log(`${this.proj}`);
-    },
-  },
-  created() {
-    this.getProject();
   },
 };
 </script>

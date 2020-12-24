@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import axios from "@/utils"
 // import MaterialCard from "../../components/base/MaterialCard.vue";
 export default {
   // components: { MaterialCard },
@@ -289,7 +290,20 @@ export default {
     toProject(projectId) {
       this.$router.push({ name: 'Project Dashboard' });
       this.$store.state.project = projectId;
-    }
+    },
+    getProject() {
+      console.log("IN getProject()");
+      console.log(`${this.$store.state.project}`);
+      axios.get(`/project/${this.$store.state.project}`)
+        .then(response => (this.proj = response.data.proj))
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log(`${this.proj}`);
+    },
+  },
+  created() {
+    this.getProject();
   },
 };
 </script>

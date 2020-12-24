@@ -44,7 +44,7 @@
             :single-select=false
             show-select
             item-key="stuid"
-            :items="students"
+            :items="Members"
             :search="search"
             show-expand
             class="elevation-1">
@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import axios from "@/utils"
+
 export default {
   data() {
     return {
@@ -164,6 +166,15 @@ export default {
       else if (state === true) return "Need Grading";
       else return state;
     },
+    getMembers() {
+      const members = axios.get(`/course/team/project/${this.$store.state.project.project_id}/student`).then(resp => resp.data);;
+      members.forEach(async (id) => {
+        const stuInfo = await axios.get(`/user?user_id=${id}`).then(resp => resp.data);
+        this.Records.push(stuInfo);
+      })().then(() => {
+        console.log("GROUPPPP: " + JSON.stringify(this.Records))
+      });
+    }
   },
 };
 </script>

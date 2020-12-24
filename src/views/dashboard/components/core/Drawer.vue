@@ -38,6 +38,12 @@
           <base-item v-else :key="`item1-${i}`" :item="item"/>
         </template>
       </div>
+      <div v-else>
+        <template v-for="(item, i) in computedItems_stu">
+          <base-item-group v-if="item.children" :key="`group1-${i}`" :item="item"/>
+          <base-item v-else :key="`item1-${i}`" :item="item"/>
+        </template>
+      </div>
       <div v-if="this.$store.state.project!=null">
         <div v-if="roles === 'student'">
           <template v-for="(item, i) in computedItems_proj_stu">
@@ -151,7 +157,7 @@ export default {
           },
           {
             title: "ANNOUNCEMENT",
-            to: "announcements",
+            to: "announce",
             icon: "mdi-archive-arrow-up-outline",
           },
           {

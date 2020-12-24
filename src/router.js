@@ -173,7 +173,7 @@ const router = new Router({
         },
         {
           name: 'Project Announcements',
-          path: '/proj/announcement',
+          path: '/proj/announce',
           component: () => import('@/views/student/proj/Announcement/Anns'),
           meta: {
             requireAuth: true
