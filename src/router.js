@@ -50,6 +50,14 @@ const router = new Router({
             requireAuth: true
           }
         },
+        {
+          name: 'Optional Projects',
+          path: '/optionalProj',
+          component: () => import('@/views/dashboard/optionalProj'),
+          meta: {
+            requireAuth: true
+          }
+        },
         // Pages
         {
           name: 'Calendar',
@@ -165,7 +173,7 @@ const router = new Router({
         },
         {
           name: 'Project Announcements',
-          path: '/proj/announcement',
+          path: '/proj/announce',
           component: () => import('@/views/student/proj/Announcement/Anns'),
           meta: {
             requireAuth: true
@@ -190,7 +198,15 @@ const router = new Router({
         {
           name: 'Submissions',
           path: '/proj/submissions',
-          component: () => import('@/views/student/proj/Submissions'),
+          component: () => import('@/views/student/proj/submissions/submissionList'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          name: "Submission Info",
+          path: '/proj/submissioninfo',
+          component: () => import('@/views/student/proj/submissions/submissionInfo'),
           meta: {
             requireAuth: true
           }
