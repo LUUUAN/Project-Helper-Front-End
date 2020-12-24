@@ -116,7 +116,7 @@ export default {
       subheaders: [
         { text: "Student ID", value: "user_id" },
         { text: "Name", value: "username" },
-        { text: "Description", value: "description" },
+        // { text: "Description", value: "description" },
       ],
       groupInfo: [],
     };

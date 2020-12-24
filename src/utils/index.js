@@ -47,7 +47,6 @@ mock.onGet("/user?user_id=1111").reply(
     username: "Student 1",
     password: "stu01",
     is_teacher: false,
-    description: "Personal Description!"
   }
 )
 
@@ -56,7 +55,6 @@ mock.onGet("/user?user_id=2222").reply(
     user_id: 2222,
     username: "Teacher 1",
     password: "TA01",
-    description: "Personal Description!"
   }
 )
 
@@ -67,7 +65,6 @@ mock.onGet("/user?user_id=4").reply(
     username: "Student 4",
     password: "stu04",
     is_teacher: false,
-    description: "Personal Description!"
   }
 )
 mock.onGet("/user?user_id=3").reply(
@@ -76,7 +73,6 @@ mock.onGet("/user?user_id=3").reply(
     username: "Student 3",
     password: "stu03",
     is_teacher: false,
-    description: "Personal Description!"
   }
 )
 mock.onGet("/user?user_id=1").reply(
@@ -85,7 +81,6 @@ mock.onGet("/user?user_id=1").reply(
     username: "Student 1",
     password: "stu01",
     is_teacher: false,
-    description: "Personal Description!"
   }
 )
 mock.onGet("/user?user_id=2").reply(
@@ -94,7 +89,6 @@ mock.onGet("/user?user_id=2").reply(
     username: "Student 2",
     password: "stu02",
     is_teacher: false,
-    description: "Personal Description!"
   }
 )
 

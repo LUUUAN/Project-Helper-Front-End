@@ -8,7 +8,7 @@
           <v-text-field v-model="lab.lab_name" color="secondary" label="Lab Name*"/>
           <div class="my-3"/>
           <base-subheading>Lab Size</base-subheading>
-          <v-text-field color="secondary" label="Lab Size*" v-model="lab.lab_size" type="number"/>
+          <v-text-field color="secondary" label="Lab Size*" @change="changeLabSize($event)" type="number"/>
 
           <base-subheading>Lab Time</base-subheading>
           <v-row justify="start" align-content="space-between">
@@ -85,7 +85,7 @@
 
 <script>
 export default {
-  props: ['lab', 'days', 'weekTypes', 'id'],
+  props: ['lab', 'days', 'weekTypes', 'id', 'labSizeString'],
   data: function () {
     return {
       time: "",
@@ -120,6 +120,12 @@ export default {
     confirmTime3() {
       this.lab.lab_time[1].end_time = this.time;
       this.timeMenu3 = false;
+    },
+    changeLabSize(size) {
+      console.log("EVENT: " + size);
+      // eslint-disable-next-line radix
+      this.lab.lab_size = parseInt(size);
+      this.$emit('change', this.lab);
     }
   },
 };

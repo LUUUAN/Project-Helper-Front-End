@@ -29,7 +29,7 @@
               <v-text-field color="secondary" label="Department*" v-model="course.department"/>
 
               <base-subheading>Course Size</base-subheading>
-              <v-text-field color="secondary" label="Course Size*" v-model="course.course_size" type="number"/>
+              <v-text-field color="secondary" label="Course Size*" v-model="courseSizeString" type="number"/>
             </v-col>
             <v-col cols="12" md="6">
 
@@ -40,7 +40,7 @@
                   </v-select>
                 </v-col>
                 <v-col cols="6">
-                  <v-select :items="weekTypes" label="Week Type" v-model="course.course_time[0].weektype">
+                  <v-select :items="weekTypes" label="Week Type" @change="course.course_time[0].weektype = weekTypes.indexOf($event)">
                   </v-select>
                 </v-col>
                 <v-col cols="6" >
@@ -99,7 +99,7 @@
                   </v-select>
                 </v-col>
                 <v-col cols="6">
-                  <v-select :items="weekTypes" label="Week Type" v-model="course.course_time[1].weektype">
+                  <v-select :items="weekTypes" label="Week Type" @change="course.course_time[1].weektype = weekTypes.indexOf($event)">
                   </v-select>
                 </v-col>
                 <v-col cols="6" >
@@ -162,6 +162,7 @@
                   v-for="field in labs"
                   :key="field.id"
                   :days="field.days"
+                  :labSizeString="field.labSizeString"
                   :weekTypes="field.weekTypes"
                   @deleteLab="deleteLab(field.id)"
                   v-model="field.lab"
@@ -204,6 +205,7 @@ export default {
     semesterRes: "",
     acaYearRes: "",
     time: "",
+    courseSizeString: "",
     course: {
       course_name: "",
       semester: "",
@@ -248,6 +250,7 @@ export default {
         id: this.count++,
         days: this.days,
         weekTypes: this.weekTypes,
+        labSizeString: "",
         lab: {
           lab_name: "",
           course_id: 0,
@@ -275,15 +278,15 @@ export default {
       this.labs.splice(index, 1);
     },
     createCourse() {
-      for (let i = 0; i < this.course.course_time.length; i++) {
-        this.course.course_time[i].weektype = this.weekTypeDict[this.course.course_time[i].weektype];
-      }
       this.course.semester = `${this.acaYearRes} ${this.semesterRes}`;
+      // eslint-disable-next-line radix
+      this.course.course_size = parseInt(this.courseSizeString);
       axios.post(`/course`, this.course).then((response) => {
         const { course_id } = response.data;
         // eslint-disable-next-line camelcase
         console.log(`COURSE ID : ${course_id}`)
         for (let j = 0; j < this.labs.length; j++) {
+          // eslint-disable-next-line radix
           console.log(this.labs[j])
           // eslint-disable-next-line camelcase
           axios.post(`/course/${course_id}/lab`, this.labs[j].lab).then((resp) => {
