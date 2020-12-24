@@ -16,7 +16,7 @@
 
       <v-data-table :headers="headers" :items="Records" class="elevation-1">
         <template v-slot:item.view="{ item }">
-          <v-icon>{{ item.view }}</v-icon>
+          <v-icon @click=>{{ item.view }}</v-icon>
         </template>
       </v-data-table>
       <br />
@@ -39,21 +39,29 @@
               Add Member
             </v-card-title>
             <br>
-            <br>
             <v-text-field
+              v-model="search"
               flat
               solo-inverted
               hide-details
               prepend-inner-icon="mdi-magnify"
-              label="Search By Student ID / Student Name / Tag"
-              class="hidden-sm-and-down pl-4 pr-4"
+              label="Search by Student ID / Lab ID / Name / Tags"
+              single-line
             ></v-text-field>
-            <br />
-            <v-data-table :headers="stuheaders" :single-select=false show-select item-key="stuid" :items="students" class="elevation-1">
+            <br>
+            <v-data-table
+            :headers="stuheaders"
+            :single-select=false
+            show-select
+            item-key="stuid"
+            :items="students"
+            :search="search"
+            class="elevation-1">
               <template v-slot:item.view="{ item }">
-                <v-icon>{{ item.view }}</v-icon>
+                <v-icon @click="memberDialog=true">{{ item.view }}</v-icon>
               </template>
             </v-data-table>
+            <br>
             <v-row align="center" justify="space-around" align-content="center">
               <v-btn
                 color="success"
@@ -81,6 +89,7 @@
 export default {
   data() {
     return {
+      search: '',
       changeDialog: false,
       manuAddDialog: false,
       fileAddDialog: false,
@@ -165,6 +174,9 @@ export default {
       else if (state === true) return "Need Grading";
       else return state;
     },
+    viewMember(member) {
+
+    }
   },
 };
 </script>

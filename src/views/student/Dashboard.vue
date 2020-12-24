@@ -37,9 +37,6 @@
               </v-col>
             </v-row>
           </v-card-text>
-          <v-card-actions class="justify-center">
-            <v-btn color="success" class="mr-0">Previous Project</v-btn>
-          </v-card-actions>
         </base-material-card>
       </v-col>
 
