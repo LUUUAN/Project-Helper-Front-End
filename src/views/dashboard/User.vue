@@ -14,7 +14,7 @@
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12" lg="4" md="4">
-                  <v-card flat >
+                  <v-card flat>
                     <v-card-text>
                       <v-row>
                         <v-spacer></v-spacer>
@@ -40,14 +40,14 @@
                       <v-row>
                         <v-spacer></v-spacer>
                         <p class="text-h5 font-weight-medium">
-                          {{user.username}}
+                          {{ user.username }}
                         </p>
                         <v-spacer></v-spacer>
                       </v-row>
                       <v-row>
                         <v-spacer></v-spacer>
                         <p class="text-subtitle-1 font-weight-regular">
-                          {{user.user_id}}
+                          {{ user.user_id }}
                         </p>
                         <v-spacer></v-spacer>
                       </v-row>
@@ -149,7 +149,7 @@
 import axios from '@/store';
 
 export default {
-  components: { },
+  components: {},
   data: () => ({
     files: null,
     openChangePass: false,
@@ -171,10 +171,10 @@ export default {
           .post("/profile_photo", formData)
           .then(response => {
             console.log("Success!");
-            console.log({ response });
+            console.log({response});
           })
           .catch(error => {
-            console.log({ error });
+            console.log({error});
           });
       } else {
         console.log("there are no files.");
@@ -182,7 +182,9 @@ export default {
     }
   },
   computed: {
-    user: function() { return this.$store.state.user }
+    user: function () {
+      return this.$store.state.user
+    }
   }
 };
 </script>

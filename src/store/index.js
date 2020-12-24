@@ -3,19 +3,16 @@ import Vuex from 'vuex';
 import axios from '@/utils';
 
 Vue.use(Vuex);
-
 const store = new Vuex.Store({
   state: {
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
     drawer: null,
-    user: {},
-    token: '',
+    user: JSON.parse(window.localStorage.getItem('user')),
     labs: {},
     projects: {},
     courses: {},
     project: null,
-    student: true,
   },
 
   mutations: {
@@ -29,15 +26,16 @@ const store = new Vuex.Store({
       state.barColor = payload
     },
     SET_TOKEN: (state, data) => {
-      state.token = data
-      window.sessionStorage.setItem('token', data)
+      window.localStorage.setItem('token', data)
     },
     LOGOUT: (state) => {
       // 登出的时候要清除token
-      state.token = null
-      state.user = null
-      window.sessionStorage.removeItem('token')
-      window.sessionStorage.removeItem('user')
+      state.user = null;
+      state.project = null;
+      window.localStorage.removeItem('token');
+    },
+    SET_ROLE: (state, data) => {
+      window.localStorage.setItem('roles', data)
     }
   },
 
@@ -45,13 +43,12 @@ const store = new Vuex.Store({
     async FETCH_USER({ state }, id) {
       return axios.get(`/user?user_id=${id}`).then(resp => {
         const { data } = resp;
-        // console.log(data);
-        // console.log(resp.data);
-        state.user = data;
+        window.localStorage.setItem('user', JSON.stringify(data))
+        state.user = data
       });
     },
     async FETCH_LABS({ state }) {
-      return axios.get("/labs").then(resp => {
+      return axios.get(`/course/${state.project}`).then(resp => {
         const { data } = resp.data;
         state.labs = data;
       });
@@ -72,7 +69,7 @@ const store = new Vuex.Store({
     async NEW_PROJECT({ dispatch }, project) {
       return axios.post(`/project`, project).then(() => {
         dispatch("FETCH_PROJECTS");
-        });
+      });
     },
     async DELETE_PROJECT({ dispatch }, { name }) {
       return axios.delete(`/project/${name}`).then(() => {

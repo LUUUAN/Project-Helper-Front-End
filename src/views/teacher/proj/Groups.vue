@@ -37,12 +37,13 @@
         solo-inverted
         hide-details
         prepend-inner-icon="mdi-magnify"
+        v-model="search"
         label="Search By Student ID / Group ID / Student Name"
         class="hidden-sm-and-down pl-4 pr-4"
       ></v-text-field>
       <br />
 
-      <v-data-table :headers="headers" :items="Records" class="elevation-1">
+      <v-data-table :headers="headers" :items="Records" :search="search" class="elevation-1">
         <template v-slot:item.view="{ item }">
           <v-btn
             class="px-2 ml-1"
@@ -87,6 +88,7 @@
 export default {
   data() {
     return {
+      search: '',
       dialog: false,
       Records: [
         {
