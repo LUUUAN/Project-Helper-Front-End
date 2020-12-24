@@ -84,6 +84,13 @@ export default {
         to: "/calendar",
       },
     ],
+    items_stu: [
+      {
+        icon: "mdi-image",
+        title: "Optional Projects",
+        to: "/optionalProj"
+      }
+    ],
     items_TA: [
       {
         title: "ADD COURSE",
@@ -177,6 +184,9 @@ export default {
     },
     computedItems_TA() {
       return this.items_TA.map(this.mapItem);
+    },
+    computedItems_stu() {
+      return this.items_stu.map(this.mapItem);
     },
     computedItems_proj() {
       return this.items_proj.map(this.mapItem);
