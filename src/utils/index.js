@@ -4,7 +4,9 @@ import MockAdapter from "axios-mock-adapter"
 
 // production
 // export default axios;
-const axios = Axios.create();
+const axios = Axios.create({
+  baseURL: `http://project-helper.com/api`,
+});
 axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
   request.headers = {
@@ -89,7 +91,29 @@ mock.onPost("/lab").reply(200, (config) => {
   this.$store.labs.add(data);
 })
 
-mock.onPost("/course").reply(200);
+mock.onPost("/course").reply(200, {
+  course_id: 1
+});
+mock.onGet("/teacher?user_id=2222/course").reply(200, {
+  courses: [1, 2, 3, 4]
+})
+mock.onGet("/course?course_id=1").reply(200, {
+  course_name: "This is course 1",
+  course_id: 1
+})
+mock.onGet("/course?course_id=2").reply(200, {
+  course_name: "This is course 2",
+  course_id: 2
+})
+mock.onGet("/course?course_id=3").reply(200, {
+  course_name: "This is course 3",
+  course_id: 3
+})
+mock.onGet("/course?course_id=4").reply(200, {
+  course_name: "This is course 4",
+  course_id: 4
+})
+
 
 mock.onGet('/project/1234').reply(200, {
   proj: {

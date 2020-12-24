@@ -3,7 +3,7 @@
     <section class="mb-12 text-center">
       <h1 class="font-weight-light mb-2 headline">Add New Project</h1>
 
-      <span class="font-weight-light subtitle-1">Create class first if you haven't</span>
+      <span class="font-weight-light subtitle-1">Create course first if you haven't</span>
     </section>
 
     <v-row>
@@ -13,7 +13,7 @@
             <v-col cols="12" md="6">
               <base-subheading>Course</base-subheading>
 
-              <v-select color="secondary" item-color="secondary" :items="classes">
+              <v-select color="secondary" item-color="secondary" :items="allCourse.map(c => c.course_name)" v-model="courseNameSelected">
                 <template v-slot:item="{ attrs, item, on }">
                   <v-list-item
                     v-bind="attrs"
@@ -31,7 +31,7 @@
 
               <div class="my-3" />
               <base-subheading>Name</base-subheading>
-              <v-text-field color="secondary" label="Project Name*" />
+              <v-text-field color="secondary" label="Project Name*" v-model="proj.project_name"/>
               <div class="my-3" />
 
               <base-subheading>Grouping Rule</base-subheading>
@@ -52,7 +52,7 @@
               ></v-switch>
               <div class="my-3" />
               <base-subheading>Description</base-subheading>
-              <v-textarea solo name="input-new-proj-info" hint="Enter Project Description Here" />
+              <v-textarea solo name="input-new-proj-info" hint="Enter Project Description Here" v-model="proj.project_description"/>
             </v-col>
             <v-col cols="12" md="6">
               <base-subheading>Skill Tags</base-subheading>
@@ -70,45 +70,44 @@
                   >{{ item }}</v-chip>
                 </template>
               </v-combobox>
-              <base-subheading class="mb-6">File Upload</base-subheading>
 
-              <v-file-input
-                v-model="files"
-                color="deep-purple accent-4"
-                counter
-                label="File input"
-                multiple
-                placeholder="Select your files"
-                prepend-icon="mdi-paperclip"
-                outlined
-                :display-size="1000"
+              <base-subheading class="mb-6">Grouping Deadline</base-subheading>
+              <v-menu
+                v-model="menu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                min-width="290px"
+                offset-y
               >
-                <template v-slot:selection="{ index, text }">
-                  <v-chip v-if="index < 2" color="deep-purple accent-4" dark label small>{{ text }}</v-chip>
-
-                  <span
-                    v-else-if="index === 2"
-                    class="overline grey--text text--darken-3 mx-2"
-                  >+{{ files.length - 2 }} File(s)</span>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="proj.project_end_grouping_time"
+                    color="secondary"
+                    label="Select Grouping DDL"
+                    prepend-icon="mdi-calendar-outline"
+                    readonly
+                    v-on="on"
+                  />
                 </template>
-              </v-file-input>
-              <base-subheading class="mb-6">Deadline</base-subheading>
-              <Deadline
-                v-for="field in fields"
-                :key="field.id"
-                :menu="field.menu"
-                :date="field.date"
-                :id="field.id"
-                @deleteddl="deleteDDL"
-              ></Deadline>
-              <v-btn type="button" v-on:click="addDDL()">Add Deadline</v-btn>
+
+                <v-date-picker v-model="date" color="secondary" landscape scrollable>
+                  <v-spacer />
+                  <v-btn color="secondary" large @click="menu = false">Cancel</v-btn>
+
+                  <v-btn color="secondary" large @click="saveGroupingDDL">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+              <base-subheading class="mb-6">
+                Max Group Allowed
+              </base-subheading>
+              <v-text-field type="number" v-model="proj.project_team_number"></v-text-field>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
     <v-row justify="space-around">
-      <v-btn class="ma-3" color="success" large>
+      <v-btn class="ma-3" color="success" large @click="createNewProject">
         <v-icon>mdi-check</v-icon>Create Project
       </v-btn>
     </v-row>
@@ -116,18 +115,13 @@
 </template>
 
 <script>
-import Deadline from "../dashboard/accessory/Deadline.vue";
+import axios from "@/utils"
 
 export default {
-  components: { Deadline },
   name: "DashboardFormsExtendedForms",
 
   data: () => ({
     menu: false,
-    menu2: false,
-    menu3: false,
-    fields: [],
-    ddlCount: 0,
     projNum: [1, 3],
     date: "",
     dropdown: [
@@ -146,33 +140,52 @@ export default {
     ],
     files: [],
     items: ["Javascript", "SpringBoot", "UI Design", "Vue.js"],
-    classes: [
-      "Object Oriented Analysis and Design",
-      "Cyptography and Network Security",
-      "Computer Network",
-      "Embedded System",
-      "Artifitial Intelligence",
-    ],
     acrossLab: false,
+    allCourse: [],
+    courseNameSelected: "",
+    proj: {
+      course_id: 0,
+      project_name: "",
+      max_project_size: 5,
+      min_project_size: 2,
+      project_description: "",
+      project_team_number: 10,
+      project_end_grouping_time: "",
+      project_across_lab: 0,
+    }
   }),
   methods: {
-    addDDL: function () {
-      this.fields.push({
-        type: Deadline,
-        id: this.count++,
-        date: "",
-        menu: false,
-      });
+    saveGroupingDDL() {
+      this.proj.project_end_grouping_time = this.date;
+      this.menu = false;
     },
-    deleteDDL(id) {
-      let index = 0;
-      for (; index < this.fields.length; index++) {
-        if (this.fields[index].id === id) {
-          break;
+    createNewProject() {
+      [this.proj.min_project_size, this.proj.max_project_size] = this.projNum
+      if (this.acrossLab === false) {
+        this.proj.project_across_lab = 0
+      } else {
+        this.proj.project_across_lab = 1
+      }
+      for (let i = 0; i < this.allCourse.length; i++) {
+        if (this.allCourse[i].course_name === this.courseNameSelected) {
+          this.proj.course_id = this.allCourse[i].course_id
         }
       }
-      this.fields.splice(index, 1);
-    },
+      axios.post(`/course/${this.proj.course_id}/project`, this.proj).then((response) => {
+        if (response.status === 200) {
+          alert("Add Success")
+        }
+      })
+    }
   },
+  created() {
+    axios.get(`/teacher?user_id=${this.$store.state.user.user_id}/course`).then((response) => {
+      const allCourseId = response.data.courses;
+      const promises = allCourseId.map(id => axios.get(`/course?course_id=${id}`).then(resp => resp.data));
+      Promise.all(promises).then(courses => {
+        this.allCourse = courses;
+      })
+    })
+  }
 };
 </script>

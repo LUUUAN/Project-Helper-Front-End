@@ -3,13 +3,12 @@ import Vuex from 'vuex';
 import axios from '@/utils';
 
 Vue.use(Vuex);
-
 const store = new Vuex.Store({
   state: {
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
     drawer: null,
-    user: {},
+    user: JSON.parse(window.localStorage.getItem('user')),
     labs: {},
     projects: {},
     courses: {},
@@ -44,7 +43,8 @@ const store = new Vuex.Store({
     async FETCH_USER({ state }, id) {
       return axios.get(`/user?user_id=${id}`).then(resp => {
         const { data } = resp;
-        window.localStorage.setItem('user', data)
+        window.localStorage.setItem('user', JSON.stringify(data))
+        state.user = data
       });
     },
     async FETCH_LABS({ state }) {

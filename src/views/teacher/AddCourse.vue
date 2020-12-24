@@ -3,7 +3,6 @@
     <section class="mb-12 text-center">
       <h1 class="font-weight-light mb-2 headline">Add New Course</h1>
     </section>
-
     <v-row>
       <v-col cols="12">
         <v-card class="pa-6">
@@ -152,18 +151,24 @@
                   </v-menu>
                 </v-col>
               </v-row>
-              <base-subheading class="mb-6">Labs</base-subheading>
-              <Deadline
-                v-for="field in fields"
-                :key="field.id"
-                :menu="field.menu"
-                :date="field.date"
-                :id="field.id"
-                @deleteddl="deleteDDL"
-              ></Deadline>
-              <v-btn type="button" v-on:click="addDDL()">Add Labs</v-btn>
             </v-col>
           </v-row>
+        </v-card>
+        <v-card>
+            <v-row align="center" justify="space-around">
+              <v-col cols="10">
+                <base-subheading class="mb-6">Labs</base-subheading>
+                <AddLab
+                  v-for="field in labs"
+                  :key="field.id"
+                  :days="field.days"
+                  :weekTypes="field.weekTypes"
+                  @deleteLab="deleteLab(field.id)"
+                  v-model="field.lab"
+                ></AddLab>
+                <v-btn type="button" v-on:click="addLab">Add Labs</v-btn>
+              </v-col>
+            </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -177,13 +182,15 @@
 
 <script>
 import axios from "@/utils";
-import Deadline from "../dashboard/accessory/Deadline.vue";
+import AddLab from "../dashboard/accessory/AddLab.vue";
 
 export default {
-  components: { Deadline },
+  components: { AddLab },
   name: "DashboardFormsExtendedForms",
 
   data: () => ({
+    labs: [],
+    count: 0,
     timeMenu0: false,
     timeMenu1: false,
     timeMenu2: false,
@@ -235,32 +242,55 @@ export default {
       this.course.course_time[1].end_time = this.time;
       this.timeMenu3 = false;
     },
-    addDDL: function () {
-      this.fields.push({
-        type: Deadline,
+    addLab() {
+      this.labs.push({
+        type: AddLab,
         id: this.count++,
-        date: "",
-        menu: false,
+        days: this.days,
+        weekTypes: this.weekTypes,
+        lab: {
+          lab_name: "",
+          course_id: 0,
+          lab_description: "",
+          lab_size: 0,
+          lab_time: [
+            {
+              start_time: "10:20",
+              end_time: "12:10",
+              weektype: 0,
+              weekday: "Mon"
+            },
+          ]
+        },
       });
+      console.log(this.labs)
     },
-    deleteDDL(id) {
+    deleteLab(id) {
       let index = 0;
-      for (; index < this.fields.length; index++) {
-        if (this.fields[index].id === id) {
+      for (; index < this.labs.length; index++) {
+        if (this.labs[index].id === id) {
           break;
         }
       }
-      this.fields.splice(index, 1);
+      this.labs.splice(index, 1);
     },
     createCourse() {
-      let i = 0
-      for (; i < this.course.course_time.length; i++) {
-        this.course.course_time[i].weektype = this.weekTypeDict[this.course.course_time[i].weektype]
+      for (let i = 0; i < this.course.course_time.length; i++) {
+        this.course.course_time[i].weektype = this.weekTypeDict[this.course.course_time[i].weektype];
       }
       this.course.semester = `${this.acaYearRes} ${this.semesterRes}`;
       axios.post(`/course`, this.course).then((response) => {
-        if (response.status === 200) {
-          alert("Add Success");
+        const { course_id } = response.data;
+        // eslint-disable-next-line camelcase
+        console.log(`COURSE ID : ${course_id}`)
+        for (let j = 0; j < this.labs.length; j++) {
+          console.log(this.labs[j])
+          // eslint-disable-next-line camelcase
+          axios.post(`/course/${course_id}/lab`, this.labs[j].lab).then((resp) => {
+            if (resp.status === 200) {
+              alert("Add Success");
+            }
+          })
         }
       });
     }
