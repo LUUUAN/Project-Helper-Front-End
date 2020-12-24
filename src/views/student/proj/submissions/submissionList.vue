@@ -32,41 +32,27 @@
             <template v-slot:item.dueDate="{ item }">
               <v-chip :color="getColor(item.dueDate)" dark>{{ item.dueDate }}</v-chip>
             </template>
+            <template v-slot:item.grade="{ item }">
+              <v-chip :color="gradeColor(item.grade)" dark>{{ item.grade }}</v-chip>
+            </template>
+            <template v-slot:item.status="{ item }">
+              <v-chip :color="getStatus(item.status)" dark>{{ item.status }}</v-chip>
+            </template>
             <template v-slot:item.view="{ item }" >
               <v-btn
                 class="px-2 ml-1"
                 color="warning"
                 min-width="0"
                 small
-                to="assignment-info"
+                to="submissionInfo"
               >
                 <v-icon>{{ item.view }}</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:item.grade="{ item }">
-              <v-btn
-                class="px-2 ml-1"
-                color="warning"
-                min-width="0"
-                small
-                to="assignment-grading"
-              >
-                <v-icon>{{ item.grade }}</v-icon>
               </v-btn>
             </template>
           </v-data-table>
         </v-card-text>
       </base-material-card>
     </v-col>
-    <v-row align="end" align-content="center" justify="space-around">
-      <v-btn
-        class="ma-2"
-        color="success"
-      >
-        New Assignment
-        <v-icon right dark>mdi-cloud-upload</v-icon>
-      </v-btn>
-    </v-row>
   </v-container>
 </template>
 
@@ -79,28 +65,28 @@ export default {
           assName: "Proposal",
           pubDate: "07/12/2020",
           dueDate: "7/12/2020",
-          status: "11/58",
+          grade: "80",
+          status: "Returned",
           comments: "New comments",
-          view: "mdi-magnify-plus",
-          grade: "mdi-account-check",
+          view: "mdi-magnify-plus"
         },
         {
           assName: "Milestone1",
           pubDate: "07/12/2020",
           dueDate: "9/12/2020",
-          status: "11/58",
+          grade: "unknown",
+          status: "Need Grading",
           comments: "New comments",
-          view: "mdi-magnify-plus",
-          grade: "mdi-account-check",
+          view: "mdi-magnify-plus"
         },
         {
           assName: "Milestone2",
           pubDate: "07/12/2020",
           dueDate: "10/12/2020",
-          status: "11/58",
+          grade: "unknown",
+          status: "Need Grading - Delayed",
           comments: "New comments",
-          view: "mdi-magnify-plus",
-          grade: "mdi-account-check",
+          view: "mdi-magnify-plus"
         },
       ],
       headers: [
@@ -112,10 +98,10 @@ export default {
         },
         { text: "Release Date", value: "pubDate" },
         { text: "Due Date", value: "dueDate" },
+        { text: "Grade", value: "grade" },
         { text: "Submit Status", value: "status" },
         { text: "Comments", value: "comments" },
         { text: "View", value: "view" },
-        { text: "Grading", value: "grade" },
       ],
     };
   },
@@ -124,6 +110,15 @@ export default {
       if (date === "07/15/2020") return "red";
       else return "green";
     },
+    gradeColor(grade) {
+      if (grade >= 60) return "green";
+      else return "orange";
+    },
+    getStatus(status) {
+      if (status === "Not Submitted") return "red";
+      else if (status === "Need Grading" || status === "Need Grading - Delayed") return "orange";
+      else return "green";
+    }
   },
 };
 </script>

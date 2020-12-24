@@ -4,20 +4,10 @@
 
     <base-material-card icon="mdi-account-box-multiple" title="Students Info" class="px-5 py-3">
       <br />
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="mdi-magnify"
-        label="Search By Student ID / Student Name"
-        class="hidden-sm-and-down pl-4 pr-4"
-      ></v-text-field>
-      <br />
-
-      <v-data-table :headers="headers" :items="Records" class="elevation-1">
-        <template v-slot:item.view="{ item }">
-          <v-icon @click=>{{ item.view }}</v-icon>
-        </template>
+      <v-data-table :headers="headers" :items="Records" item-key="stuid" class="elevation-1" show-expand>
+    <template v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">{{ item.info }}</td>
+    </template>
       </v-data-table>
       <br />
       <v-row align="center" align-content="center" justify="space-around">
@@ -56,10 +46,11 @@
             item-key="stuid"
             :items="students"
             :search="search"
+            show-expand
             class="elevation-1">
-              <template v-slot:item.view="{ item }">
-                <v-icon @click="memberDialog=true">{{ item.view }}</v-icon>
-              </template>
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length">{{ item.info }}</td>
+            </template>
             </v-data-table>
             <br>
             <v-row align="center" justify="space-around" align-content="center">
@@ -99,28 +90,28 @@ export default {
           stuid: "11810000",
           distribution: "Leader",
           tags: ["Java", "Database"],
-          view: "mdi-magnify-plus",
+          info: "This member is leader"
         },
         {
           name: "Name2",
           stuid: "11810001",
           distribution: "",
           tags: ["Java", "System Building", "Factory"],
-          view: "mdi-magnify-plus",
+          info: "He didn't write any info yet"
         },
         {
           name: "Name3",
           stuid: "11810002",
           distribution: "",
           tags: ["JavaScript", "Vue", "Framework"],
-          view: "mdi-magnify-plus",
+          info: "1145141919810"
         },
         {
           name: "Name4",
           stuid: "11810003",
           distribution: "",
           tags: ["JavaScript", "TypeScript", "Vue", "Optimization"],
-          view: "mdi-magnify-plus",
+          info: "No one knows sleep down better than me"
         },
       ],
       headers: [
@@ -128,7 +119,6 @@ export default {
         { text: "Student ID", value: "stuid" },
         { text: "Distribution", value: "distribution" },
         { text: "Tags", value: "tags" },
-        { text: "View", value: "view" },
       ],
       students: [
         {
@@ -174,9 +164,6 @@ export default {
       else if (state === true) return "Need Grading";
       else return state;
     },
-    viewMember(member) {
-
-    }
   },
 };
 </script>

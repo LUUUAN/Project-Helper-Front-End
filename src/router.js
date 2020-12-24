@@ -55,6 +55,14 @@ const router = new Router({
             requireAuth: true
           }
         },
+        {
+          name: 'Optional Projects',
+          path: '/optionalProj',
+          component: () => import('@/views/dashboard/optionalProj'),
+          meta: {
+            requireAuth: true
+          }
+        },
         // Pages
         {
           name: 'Calendar',
@@ -170,7 +178,7 @@ const router = new Router({
         },
         {
           name: 'Project Announcements',
-          path: '/proj/announcement',
+          path: '/proj/announce',
           component: () => import('@/views/student/proj/Announcement/Anns'),
           meta: {
             requireAuth: true
