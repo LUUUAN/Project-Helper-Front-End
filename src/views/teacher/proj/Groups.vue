@@ -165,7 +165,7 @@ export default {
           console.log(memberIds);
           for (let i = 0; i < memberIds.length; i++) {
             const mid = memberIds[i];
-            const member = await axios.get(`/user?user_id=${mid}`).then(resp => resp.data.username);
+            const member = axios.get(`/user?user_id=${mid}`).then(resp => resp.data.username);
             team.members.push(member);
           }
           this.groups.push(team);

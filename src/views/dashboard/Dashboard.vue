@@ -293,8 +293,8 @@ export default {
     },
     getProject() {
       console.log("IN getProject()");
-      console.log(`${this.$store.state.project}`);
-      axios.get(`/project/${this.$store.state.project}`)
+      console.log(`/student/${this.$store.state.user.user_id}/project`);
+      axios.get(`/student/${this.$store.state.user.user_id}/project`)
         .then(response => (this.proj = response.data.proj))
         .catch((error) => {
           console.log(error);

@@ -119,7 +119,10 @@ export default {
           console.log(error);
         });
       }
-    }
+    },
+    getProjects() {
+      
+    },
   },
   created() {
     this.getInvitations();

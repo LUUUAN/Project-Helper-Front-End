@@ -167,14 +167,27 @@ export default {
       else return state;
     },
     getMembers() {
-      const members = axios.get(`/course/team/project/${this.$store.state.project.project_id}/student`).then(resp => resp.data);;
+      const members = axios.get(`/course/team/project/${this.$store.state.project.project_id}/student`).then(resp => resp.data);
       members.forEach(async (id) => {
-        const stuInfo = await axios.get(`/user?user_id=${id}`).then(resp => resp.data);
+        const stuInfo = await axios.get(`/user/${id}`).then(resp => resp.data);
         this.Records.push(stuInfo);
       })().then(() => {
         console.log("GROUPPPP: " + JSON.stringify(this.Records))
       });
+    },
+    getStudents() {
+      const students = axios.get(`/course/lab/${this.$store.state.project.project_id}/student`).then(resp => resp.data);
+      students.forEach(async (id) => {
+        const stuInfo = await axios.get(`/user/${id}`).then(resp => resp.data);
+        this.Records.push(stuInfo);
+      })().then(() => {
+        console.log("GROUPPPP: " + JSON.stringify(this.students))
+      });
     }
   },
+  created() {
+    this.getMembers();
+    this.getStudents();
+  }
 };
 </script>
