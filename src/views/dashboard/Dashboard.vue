@@ -292,13 +292,21 @@ export default {
       this.$store.state.project = projectId;
     },
     getProject() {
+      let projectID = [];
       console.log("IN getProject()");
       console.log(`/student/${this.$store.state.user.user_id}/project`);
       axios.get(`/student/${this.$store.state.user.user_id}/project`)
+        .then(response => (projectID = response.data.proj))
+        .catch((error) => {
+          console.log(error);
+        });
+      projectID.forEach(async (id) => {
+        axios.get(`/course/project/${id}`)
         .then(response => (this.proj = response.data.proj))
         .catch((error) => {
           console.log(error);
         });
+      });
       console.log(`${this.proj}`);
     },
   },
