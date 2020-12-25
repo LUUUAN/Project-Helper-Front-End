@@ -125,22 +125,22 @@ mock.onPost("/lab").reply(200, (config) => {
 mock.onPost("/course").reply(200, {
   course_id: 1
 });
-mock.onGet("/teacher?user_id=2222/course").reply(200, {
+mock.onGet("/teacher/2222/course").reply(200, {
   courses: [1, 2, 3, 4]
 })
-mock.onGet("/course?course_id=1").reply(200, {
+mock.onGet("/course/1").reply(200, {
   course_name: "This is course 1",
   course_id: 1
 })
-mock.onGet("/course?course_id=2").reply(200, {
+mock.onGet("/course/2").reply(200, {
   course_name: "This is course 2",
   course_id: 2
 })
-mock.onGet("/course?course_id=3").reply(200, {
+mock.onGet("/course/3").reply(200, {
   course_name: "This is course 3",
   course_id: 3
 })
-mock.onGet("/course?course_id=4").reply(200, {
+mock.onGet("/course/4").reply(200, {
   course_name: "This is course 4",
   course_id: 4
 })

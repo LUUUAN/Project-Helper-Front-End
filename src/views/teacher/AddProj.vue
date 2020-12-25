@@ -190,9 +190,9 @@ export default {
     }
   },
   created() {
-    axios.get(`/teacher?user_id=${this.$store.state.user.user_id}/course`).then((response) => {
+    axios.get(`/teacher/${this.$store.state.user.user_id}/course`).then((response) => {
       const allCourseId = response.data.courses;
-      const promises = allCourseId.map(id => axios.get(`/course?course_id=${id}`).then(resp => resp.data));
+      const promises = allCourseId.map(id => axios.get(`/course/${id}`).then(resp => resp.data));
       Promise.all(promises).then(courses => {
         this.allCourse = courses;
       })
