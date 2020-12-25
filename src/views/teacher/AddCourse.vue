@@ -10,17 +10,17 @@
             <v-col cols="12" md="6">
               <div class="my-3" />
               <base-subheading>Name</base-subheading>
-              <v-text-field v-model="course.course_name" color="secondary" label="Course Name*" />
+              <v-text-field v-model="course.course_name" color="secondary" label="Course Name*" :rules="[(v) => !!v || 'This field is required']"/>
               <div class="my-3" />
 
               <base-subheading>Term</base-subheading>
               <v-row justify="start" align-content="space-between">
                 <v-col cols="12" md="6">
-                  <v-select :items="semesters" label="Semester" v-model="semesterRes">
+                  <v-select :items="semesters" label="Semester" v-model="semesterRes" :rules="[(v) => !!v || 'This field is required']">
                   </v-select>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-select :items="acaYear" label="Academic Year" v-model="acaYearRes">
+                  <v-select :items="acaYear" label="Academic Year" v-model="acaYearRes" :rules="[(v) => !!v || 'This field is required']">
                   </v-select>
                 </v-col>
               </v-row>
@@ -29,14 +29,14 @@
               <v-text-field color="secondary" label="Department*" v-model="course.department"/>
 
               <base-subheading>Course Size</base-subheading>
-              <v-text-field color="secondary" label="Course Size*" v-model="courseSizeString" type="number"/>
+              <v-text-field color="secondary" label="Course Size*" v-model="courseSizeString" :rules="[rules.intInput]" type="number"/>
             </v-col>
             <v-col cols="12" md="6">
 
               <base-subheading>Course Time</base-subheading>
               <v-row justify="start" align-content="space-between">
                 <v-col cols="6">
-                  <v-select :items="days" label="Course Day" v-model="course.course_time[0].weekday">
+                  <v-select :items="days" label="Course Day" v-model="course.course_time[0].weekday" >
                   </v-select>
                 </v-col>
                 <v-col cols="6">
@@ -162,7 +162,6 @@
                   v-for="field in labs"
                   :key="field.id"
                   :days="field.days"
-                  :labSizeString="field.labSizeString"
                   :weekTypes="field.weekTypes"
                   @deleteLab="deleteLab(field.id)"
                   v-model="field.lab"
@@ -225,6 +224,9 @@ export default {
           weekday: ""
         }
       ]
+    },
+    rules: {
+      intInput: v => (Number.isInteger(parseFloat(v)) && parseInt(v) > 0 && parseInt(v) <= 400) || 'Must be integer between 0 and 400',
     }
   }),
   methods: {
@@ -250,7 +252,6 @@ export default {
         id: this.count++,
         days: this.days,
         weekTypes: this.weekTypes,
-        labSizeString: "",
         lab: {
           lab_name: "",
           course_id: 0,
@@ -296,6 +297,8 @@ export default {
           })
         }
       });
+    },
+    checkValidity() {
     }
   },
 };

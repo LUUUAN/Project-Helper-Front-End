@@ -8,7 +8,7 @@
           <v-text-field v-model="lab.lab_name" color="secondary" label="Lab Name*"/>
           <div class="my-3"/>
           <base-subheading>Lab Size</base-subheading>
-          <v-text-field color="secondary" label="Lab Size*" @change="changeLabSize($event)" type="number"/>
+          <v-text-field color="secondary" label="Lab Size*" @change="changeLabSize($event)" type="number" :rules="[rules.intInput]"/>
 
           <base-subheading>Lab Time</base-subheading>
           <v-row justify="start" align-content="space-between">
@@ -85,7 +85,7 @@
 
 <script>
 export default {
-  props: ['lab', 'days', 'weekTypes', 'id', 'labSizeString'],
+  props: ['lab', 'days', 'weekTypes', 'id'],
   data: function () {
     return {
       time: "",
@@ -96,6 +96,9 @@ export default {
       timeMenu2: false,
       timeMenu3: false,
       idx: this.$vnode.key,
+      rules: {
+        intInput: v => (Number.isInteger(parseFloat(v)) && parseInt(v) > 0 && parseInt(v) <= 100) || 'Must be integer between 0 and 100'
+      }
     };
   },
   model: {
@@ -122,7 +125,6 @@ export default {
       this.timeMenu3 = false;
     },
     changeLabSize(size) {
-      console.log("EVENT: " + size);
       // eslint-disable-next-line radix
       this.lab.lab_size = parseInt(size);
       this.$emit('change', this.lab);

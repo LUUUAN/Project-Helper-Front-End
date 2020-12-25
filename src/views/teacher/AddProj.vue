@@ -13,7 +13,7 @@
             <v-col cols="12" md="6">
               <base-subheading>Course</base-subheading>
 
-              <v-select color="secondary" item-color="secondary" :items="allCourse.map(c => c.course_name)" v-model="courseNameSelected">
+              <v-select color="secondary" item-color="secondary" :items="allCourse.map(c => c.course_name)" v-model="courseNameSelected" :rules="[(v) => !!v || 'This field is required']">
                 <template v-slot:item="{ attrs, item, on }">
                   <v-list-item
                     v-bind="attrs"
@@ -31,7 +31,7 @@
 
               <div class="my-3" />
               <base-subheading>Name</base-subheading>
-              <v-text-field color="secondary" label="Project Name*" v-model="proj.project_name"/>
+              <v-text-field color="secondary" label="Project Name*" v-model="proj.project_name" :rules="[(v) => !!v || 'This field is required']"/>
               <div class="my-3" />
 
               <base-subheading>Grouping Rule</base-subheading>
@@ -100,7 +100,7 @@
               <base-subheading class="mb-6">
                 Max Group Allowed
               </base-subheading>
-              <v-text-field type="number" v-model="proj.project_team_number"></v-text-field>
+              <v-text-field v-model="proj.project_team_number" :rules="[rules.intInput]"></v-text-field>
             </v-col>
           </v-row>
         </v-card>
@@ -152,6 +152,9 @@ export default {
       project_team_number: 10,
       project_end_grouping_time: "",
       project_across_lab: 0,
+    },
+    rules: {
+      intInput: v => (Number.isInteger(parseFloat(v)) && parseInt(v) > 0 && parseInt(v) <= 100) || 'Must be integer between 0 and 100'
     }
   }),
   methods: {

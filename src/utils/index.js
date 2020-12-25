@@ -166,7 +166,11 @@ mock.onGet(`/project/1/team/2`).reply(200, {
 
 mock.onGet(`/project/1/team/1/student`).reply(200, [1,2])
 mock.onGet(`/project/1/team/2/student`).reply(200, [3,4])
-
+mock.onPost(`/course/1/project`).reply(200, {
+  project_id: 1
+})
+mock.onPost(`/course/1/project/1/tag`).reply(200, {
+})
 // //
 // // mock.onGet('/project/1234').reply(200, {
 // //   proj: {
