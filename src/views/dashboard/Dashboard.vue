@@ -300,9 +300,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      console.log(projectID);
       projectID.forEach(async (id) => {
         axios.get(`/course/project/${id}`)
-        .then(response => (this.proj = response.data.proj))
+        .then(response => (this.$store.state.projects.append(response.data.proj)))
         .catch((error) => {
           console.log(error);
         });
