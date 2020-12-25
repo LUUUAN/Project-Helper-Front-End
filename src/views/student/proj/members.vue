@@ -4,20 +4,10 @@
 
     <base-material-card icon="mdi-account-box-multiple" title="Students Info" class="px-5 py-3">
       <br />
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="mdi-magnify"
-        label="Search By Student ID / Student Name"
-        class="hidden-sm-and-down pl-4 pr-4"
-      ></v-text-field>
-      <br />
-
-      <v-data-table :headers="headers" :items="Records" class="elevation-1">
-        <template v-slot:item.view="{ item }">
-          <v-icon>{{ item.view }}</v-icon>
-        </template>
+      <v-data-table :headers="headers" :items="Records" item-key="stuid" class="elevation-1" show-expand>
+    <template v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">{{ item.info }}</td>
+    </template>
       </v-data-table>
       <br />
       <v-row align="center" align-content="center" justify="space-around">
@@ -39,21 +29,30 @@
               Add Member
             </v-card-title>
             <br>
-            <br>
             <v-text-field
+              v-model="search"
               flat
               solo-inverted
               hide-details
               prepend-inner-icon="mdi-magnify"
-              label="Search By Student ID / Student Name / Tag"
-              class="hidden-sm-and-down pl-4 pr-4"
+              label="Search by Student ID / Lab ID / Name / Tags"
+              single-line
             ></v-text-field>
-            <br />
-            <v-data-table :headers="stuheaders" :single-select=false show-select item-key="stuid" :items="students" class="elevation-1">
-              <template v-slot:item.view="{ item }">
-                <v-icon>{{ item.view }}</v-icon>
-              </template>
+            <br>
+            <v-data-table
+            :headers="stuheaders"
+            :single-select=false
+            show-select
+            item-key="stuid"
+            :items="Members"
+            :search="search"
+            show-expand
+            class="elevation-1">
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length">{{ item.info }}</td>
+            </template>
             </v-data-table>
+            <br>
             <v-row align="center" justify="space-around" align-content="center">
               <v-btn
                 color="success"
@@ -78,9 +77,12 @@
 </template>
 
 <script>
+import axios from "@/utils"
+
 export default {
   data() {
     return {
+      search: '',
       changeDialog: false,
       manuAddDialog: false,
       fileAddDialog: false,
@@ -90,28 +92,28 @@ export default {
           stuid: "11810000",
           distribution: "Leader",
           tags: ["Java", "Database"],
-          view: "mdi-magnify-plus",
+          info: "This member is leader"
         },
         {
           name: "Name2",
           stuid: "11810001",
           distribution: "",
           tags: ["Java", "System Building", "Factory"],
-          view: "mdi-magnify-plus",
+          info: "He didn't write any info yet"
         },
         {
           name: "Name3",
           stuid: "11810002",
           distribution: "",
           tags: ["JavaScript", "Vue", "Framework"],
-          view: "mdi-magnify-plus",
+          info: "1145141919810"
         },
         {
           name: "Name4",
           stuid: "11810003",
           distribution: "",
           tags: ["JavaScript", "TypeScript", "Vue", "Optimization"],
-          view: "mdi-magnify-plus",
+          info: "No one knows sleep down better than me"
         },
       ],
       headers: [
@@ -119,7 +121,6 @@ export default {
         { text: "Student ID", value: "stuid" },
         { text: "Distribution", value: "distribution" },
         { text: "Tags", value: "tags" },
-        { text: "View", value: "view" },
       ],
       students: [
         {
@@ -165,6 +166,15 @@ export default {
       else if (state === true) return "Need Grading";
       else return state;
     },
+    getMembers() {
+      const members = axios.get(`/course/team/project/${this.$store.state.project.project_id}/student`).then(resp => resp.data);;
+      members.forEach(async (id) => {
+        const stuInfo = await axios.get(`/user?user_id=${id}`).then(resp => resp.data);
+        this.Records.push(stuInfo);
+      })().then(() => {
+        console.log("GROUPPPP: " + JSON.stringify(this.Records))
+      });
+    }
   },
 };
 </script>
